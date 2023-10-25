@@ -1,0 +1,40 @@
+version: '3'
+services:
+  coordinator:
+    image: 'trinodb/trino:430'
+    container_name: "coordinator"
+    ports:
+      - "8080:8080"
+    environment:
+      - TRINO_JVM_MAX_HEAP=5G
+    env_file:
+      - .env
+    volumes:
+      - ./coordinator:/coordinator/trino/:ro
+
+  worker1:
+    image: 'trinodb/trino:430'
+    environment:
+      - TRINO_JVM_MAX_HEAP=3G
+    env_file:
+      - .env
+    volumes:
+      - ./worker1:/coordinator/trino/:ro
+
+  worker2:
+    image: 'trinodb/trino:430'
+    environment:
+      - TRINO_JVM_MAX_HEAP=3G
+    env_file:
+      - .env
+    volumes:
+      - ./worker2:/coordinator/trino/:ro
+
+  worker3:
+    image: 'trinodb/trino:430'
+    environment:
+      - TRINO_JVM_MAX_HEAP=3G
+    env_file:
+      - .env
+    volumes:
+      - ./worker3:/coordinator/trino/:ro
