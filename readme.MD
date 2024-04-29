@@ -1,6 +1,6 @@
 # TrinoDB cluster - Docker Deployment
 
-This project use to deploy a small TrinoDB cluster with 3 workers for experimenting and testing purpose
+This project deploy a small TrinoDB cluster with 3 workers for experimenting and testing purpose
 
 `#Trinodb`, `mysql`, `mongodb`
 
