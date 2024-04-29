@@ -29,6 +29,9 @@ services:
       - 9001:9001
       - 9000:9000
     command: [ "server", "/data", "--console-address", ":9001" ]
+    volumes:
+      - minio_data:/data
+
   mc:
     depends_on:
       - minio
@@ -71,7 +74,7 @@ services:
     networks:
       iceberg_net:
     environment:
-      - TRINO_JVM_MAX_HEAP=1G
+      - TRINO_JVM_MAX_HEAP=2G
       - AWS_ACCESS_KEY_ID=admin
       - AWS_SECRET_ACCESS_KEY=password
       - AWS_REGION=us-east-1
@@ -85,7 +88,7 @@ services:
     networks:
       iceberg_net:
     environment:
-      - TRINO_JVM_MAX_HEAP=1G
+      - TRINO_JVM_MAX_HEAP=2G
       - AWS_ACCESS_KEY_ID=admin
       - AWS_SECRET_ACCESS_KEY=password
       - AWS_REGION=us-east-1
@@ -99,7 +102,7 @@ services:
     networks:
       iceberg_net:
     environment:
-      - TRINO_JVM_MAX_HEAP=1G
+      - TRINO_JVM_MAX_HEAP=2G
       - AWS_ACCESS_KEY_ID=admin
       - AWS_SECRET_ACCESS_KEY=password
       - AWS_REGION=us-east-1
@@ -107,6 +110,10 @@ services:
       - .env
     volumes:
       - ./worker3:/etc/trino/
+
+
+volumes:
+  minio_data: {}
 
 networks:
   iceberg_net:
