@@ -53,7 +53,7 @@ services:
       "
 
   coordinator:
-    image: 'trinodb/trino:430'
+    image: 'trinodb/trino:452'
     container_name: "coordinator"
     networks:
       iceberg_net:
@@ -70,7 +70,7 @@ services:
       - ./coordinator:/etc/trino/
 
   worker1:
-    image: 'trinodb/trino:430'
+    image: 'trinodb/trino:452'
     networks:
       iceberg_net:
     environment:
@@ -84,7 +84,7 @@ services:
       - ./worker1:/etc/trino/
 
   worker2:
-    image: 'trinodb/trino:430'
+    image: 'trinodb/trino:452'
     networks:
       iceberg_net:
     environment:
@@ -97,19 +97,19 @@ services:
     volumes:
       - ./worker2:/etc/trino/
 
-  worker3:
-    image: 'trinodb/trino:430'
-    networks:
-      iceberg_net:
-    environment:
-      - TRINO_JVM_MAX_HEAP=2G
-      - AWS_ACCESS_KEY_ID=admin
-      - AWS_SECRET_ACCESS_KEY=password
-      - AWS_REGION=us-east-1
-    env_file:
-      - .env
-    volumes:
-      - ./worker3:/etc/trino/
+#  worker3:
+#    image: 'trinodb/trino:452'
+#    networks:
+#      iceberg_net:
+#    environment:
+#      - TRINO_JVM_MAX_HEAP=2G
+#      - AWS_ACCESS_KEY_ID=admin
+#      - AWS_SECRET_ACCESS_KEY=password
+#      - AWS_REGION=us-east-1
+#    env_file:
+#      - .env
+#    volumes:
+#      - ./worker3:/etc/trino/
 
 
 volumes:
