@@ -1,12 +1,17 @@
 from kafka import KafkaConsumer
 import json
-
-consumer = KafkaConsumer(bootstrap_servers=['localhost:9092'],
+topic = "dbserver.inventory.orders"
+consumer = KafkaConsumer(topic,
+                         bootstrap_servers=['localhost:9092'],
+                        # api_version=(7, 3, 2),
                         auto_offset_reset='earliest',
                         enable_auto_commit=True,
-                         group_id='1',
-                         value_deserializer=lambda x: x.decode('utf-8'))
-consumer.subscribe(['dbserver1.inventory.orders'])
+                         group_id='2_2',
+                         value_deserializer=lambda x: x.decode('utf-8'),
+                         consumer_timeout_ms=10000)
+
+# consumer.subscribe([topic])
+
 topics = consumer.topics()
 print(topics)
 print(vars(consumer))
