@@ -10,6 +10,8 @@ services:
       MYSQL_ROOT_PASSWORD: debezium
       MYSQL_USER: mysqluser
       MYSQL_PASSWORD: mysqlpw
+    networks:
+      - kafka_net
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.2
@@ -19,6 +21,8 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
     ports:
       - '2181:2181'
+    networks:
+      - kafka_net
 
   kafka:
     image: confluentinc/cp-kafka:7.3.2
@@ -27,17 +31,24 @@ services:
       - zookeeper
     environment:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,PLAINTEXT_HOST://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_MAX_REQUEST_SIZE: 209715200
-      KAFKA_SOCKET_REQUEST_MAX_BYTES: 209715200
-
+      KAFKA_MESSAGE_MAX_BYTES: 2097152000
+      KAFKA_REPLICA_FETCH_MAX_BYTES: 2097152000
+      KAFKA_MAX_REQUEST_SIZE: 2097152000
     links:
       - zookeeper
     ports:
       - "9092:9092"
       - "29092:29092"
       - "9999:9999"
+    volumes:
+      - ./app/:/opt/app/
+    networks:
+      - kafka_net
 
   schema-registry:
     container_name: schema-registry
@@ -49,6 +60,8 @@ services:
       - SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS=PLAINTEXT://kafka:9092
     ports:
       - '8081:8081'
+    networks:
+      - kafka_net
 
   kafka-connect:
     container_name: kafka-connect
@@ -68,3 +81,9 @@ services:
       - STATUS_STORAGE_TOPIC=my_connect_statuses
       - STATUS_STORAGE_REPLICATION_FACTOR=1
       - REST_ADVERTISED_HOST_NAME=medium_debezium
+    networks:
+      - kafka_net
+
+networks:
+  kafka_net:
+    driver: bridge
