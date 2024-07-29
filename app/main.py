@@ -2,15 +2,12 @@ from kafka import KafkaConsumer
 import json
 topic = "dbserver.inventory.orders"
 consumer = KafkaConsumer(topic,
-                         bootstrap_servers=['localhost:9092'],
-                        # api_version=(7, 3, 2),
+                         bootstrap_servers=['localhost:29092'],
                         auto_offset_reset='earliest',
                         enable_auto_commit=True,
-                         group_id='2_2',
+                         group_id='112',
                          value_deserializer=lambda x: x.decode('utf-8'),
                          consumer_timeout_ms=10000)
-
-# consumer.subscribe([topic])
 
 topics = consumer.topics()
 print(topics)
